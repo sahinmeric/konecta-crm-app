@@ -13,4 +13,19 @@ router.get('/requests', authenticateToken, async (req, res) => {
   }
 });
 
+// Route to create a new request (accessible to employees and admins)
+router.post('/requests', authenticateToken, async (req, res) => {
+  const { code, description, summary } = req.body;
+  const employee_id = req.user.id; // Use the authenticated user's ID as the employee_id
+
+  try {
+    // Create a new request with English field names
+    const newRequest = await Request.create({ code, description, summary, employee_id });
+    res.status(201).json({ message: 'Request created successfully', request: newRequest });
+  } catch (error) {
+    res.status(500).json({ message: 'Error creating request', error: error.message });
+  }
+});
+
+
 module.exports = router;

@@ -1,25 +1,23 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
 
-// Define the Request model
+
 const Request = sequelize.define('Request', {
+  code: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   description: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  status: {
+  summary: {
     type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: 'pending',
+    allowNull: true,
   },
-  createdBy: {
-    type: DataTypes.STRING,
+  employee_id: {
+    type: DataTypes.INTEGER,
     allowNull: false,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-    defaultValue: DataTypes.NOW,
   },
 });
 
