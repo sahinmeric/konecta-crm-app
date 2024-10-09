@@ -27,4 +27,32 @@ router.post('/employees', authenticateToken, async (req, res) => {
   }
 });
 
+// Route to update an existing employee (only accessible to admin users)
+router.put('/employees/:id', authenticateToken, authorizeRole('admin'), async (req, res) => {
+  const { id } = req.params; // Get employee ID from URL parameters
+  const { name, position, salary, hireDate } = req.body; // Get updated fields from request body
+
+  try {
+    // Find the employee by ID
+    const employee = await Employee.findByPk(id);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    // Update the employee's information
+    employee.name = name || employee.name;
+    employee.position = position || employee.position;
+    employee.salary = salary || employee.salary;
+    employee.hireDate = hireDate || employee.hireDate;
+
+    // Save the updated employee to the database
+    await employee.save();
+
+    res.status(200).json({ message: 'Employee updated successfully', employee });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating employee', error: error.message });
+  }
+});
+
+
 module.exports = router;
