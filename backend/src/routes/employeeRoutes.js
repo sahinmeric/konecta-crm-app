@@ -55,4 +55,25 @@ router.put('/employees/:id', authenticateToken, authorizeRole('admin'), async (r
 });
 
 
+// Route to delete an employee (only accessible to admin users)
+router.delete('/employees/:id', authenticateToken, authorizeRole('admin'), async (req, res) => {
+  const { id } = req.params; // Get employee ID from URL parameters
+
+  try {
+    // Find the employee by ID
+    const employee = await Employee.findByPk(id);
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    // Delete the employee from the database
+    await employee.destroy();
+
+    res.status(200).json({ message: 'Employee deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting employee', error: error.message });
+  }
+});
+
+
 module.exports = router;
