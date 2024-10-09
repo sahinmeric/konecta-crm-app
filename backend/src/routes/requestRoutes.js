@@ -1,7 +1,8 @@
 const express = require('express');
-const Request = require('../models/Request'); // Import the Request model
-const authenticateToken = require('../middlewares/authMiddleware'); // Import authentication middleware
+const Request = require('../models/Request');
+const authenticateToken = require('../middlewares/authMiddleware');
 const router = express.Router();
+const authorizeRole = require('../middlewares/roleMiddleware');
 
 // Route to get all requests (only accessible to authenticated users)
 router.get('/requests', authenticateToken, async (req, res) => {
@@ -27,5 +28,24 @@ router.post('/requests', authenticateToken, async (req, res) => {
   }
 });
 
+// Route to delete a request (only accessible to admin users)
+router.delete('/requests/:id', authenticateToken, authorizeRole('admin'), async (req, res) => {
+  const { id } = req.params; // Get request ID from URL parameters
+
+  try {
+    // Find the request by ID
+    const request = await Request.findByPk(id);
+    if (!request) {
+      return res.status(404).json({ message: 'Request not found' });
+    }
+
+    // Delete the request from the database
+    await request.destroy();
+
+    res.status(200).json({ message: 'Request deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting request', error: error.message });
+  }
+});
 
 module.exports = router;
