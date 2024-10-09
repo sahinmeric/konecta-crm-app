@@ -6,11 +6,26 @@ const { body, validationResult } = require('express-validator');
 
 const router = express.Router();
 
-// Route to get all employees (only accessible to authenticated users)
+// Route to get all employees with pagination (accessible to employees and admins)
 router.get('/employees', authenticateToken, async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
+  const offset = (page - 1) * limit;
+
   try {
-    const employees = await Employee.findAll();
-    res.status(200).json(employees);
+    // Retrieve employees with pagination
+    const employees = await Employee.findAndCountAll({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    // Send the paginated response
+    res.status(200).json({
+      totalItems: employees.count,
+      totalPages: Math.ceil(employees.count / limit),
+      currentPage: parseInt(page),
+      employees: employees.rows,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving employees', error: error.message });
   }
