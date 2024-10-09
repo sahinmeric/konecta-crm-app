@@ -5,11 +5,26 @@ const router = express.Router();
 const authorizeRole = require('../middlewares/roleMiddleware');
 const { body, validationResult } = require('express-validator');
 
-// Route to get all requests (only accessible to authenticated users)
+// Route to get all requests with pagination (accessible to employees and admins)
 router.get('/requests', authenticateToken, async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+
+  const offset = (page - 1) * limit;
+
   try {
-    const requests = await Request.findAll();
-    res.status(200).json(requests);
+    // Retrieve requests with pagination
+    const requests = await Request.findAndCountAll({
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    // Send the paginated response
+    res.status(200).json({
+      totalItems: requests.count,
+      totalPages: Math.ceil(requests.count / limit),
+      currentPage: parseInt(page),
+      requests: requests.rows,
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error retrieving requests', error: error.message });
   }
