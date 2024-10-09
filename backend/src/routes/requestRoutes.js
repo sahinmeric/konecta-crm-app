@@ -5,20 +5,26 @@ const router = express.Router();
 const authorizeRole = require('../middlewares/roleMiddleware');
 const { body, validationResult } = require('express-validator');
 
-// Route to get all requests with pagination (accessible to employees and admins)
+// Route to get all requests with filtering and pagination (accessible to employees and admins)
 router.get('/requests', authenticateToken, async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
-
+  const { page = 1, limit = 10, code, description, employee_id } = req.query;
   const offset = (page - 1) * limit;
 
+  // Create a filter object for the where clause
+  const filter = {};
+  if (code) filter.code = { [Sequelize.Op.like]: `%${code}%` };
+  if (description) filter.description = { [Sequelize.Op.like]: `%${description}%` };
+  if (employee_id) filter.employee_id = parseInt(employee_id);
+
   try {
-    // Retrieve requests with pagination
+    // Retrieve requests with filtering and pagination
     const requests = await Request.findAndCountAll({
+      where: filter,
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
-    // Send the paginated response
+    // Send the filtered and paginated response
     res.status(200).json({
       totalItems: requests.count,
       totalPages: Math.ceil(requests.count / limit),
