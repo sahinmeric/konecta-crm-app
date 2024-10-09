@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const authenticateToken = require('../middlewares/authMiddleware');
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -46,6 +47,10 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });
   }
+});
+
+router.get('/protected', authenticateToken, (req, res) => {
+  res.json({ message: `Welcome, you have access to this protected route, ${req.user.role}` });
 });
 
 
