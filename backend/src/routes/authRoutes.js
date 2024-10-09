@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const authenticateToken = require('../middlewares/authMiddleware');
+const authorizeRole = require('../middlewares/roleMiddleware');
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -49,10 +50,14 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// Accesible for all authenticated users
 router.get('/protected', authenticateToken, (req, res) => {
   res.json({ message: `Welcome, you have access to this protected route, ${req.user.role}` });
 });
 
-
+// Accesible for only admin role
+router.get('/admin', authenticateToken, authorizeRole('admin'), (req, res) => {
+  res.json({ message: `Welcome, Admin! You have access to this admin-only route.` });
+});
 
 module.exports = router;
