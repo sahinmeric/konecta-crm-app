@@ -3,23 +3,31 @@ const Employee = require('../models/Employee');
 const authenticateToken = require('../middlewares/authMiddleware');
 const authorizeRole = require('../middlewares/roleMiddleware');
 const { body, validationResult } = require('express-validator');
+const Sequelize = require('sequelize');
 
 const router = express.Router();
 
-// Route to get all employees with pagination (accessible to employees and admins)
+// Route to get all employees with filtering and pagination (accessible to employees and admins)
 router.get('/employees', authenticateToken, async (req, res) => {
-  const { page = 1, limit = 10 } = req.query;
+  const { page = 1, limit = 10, name, position, salary } = req.query;
 
   const offset = (page - 1) * limit;
 
+  // Create a filter object for the where clause
+  const filter = {};
+  if (name) filter.name = { [Sequelize.Op.like]: `%${name}%` };
+  if (position) filter.position = position;
+  if (salary) filter.salary = parseInt(salary);
+
   try {
-    // Retrieve employees with pagination
+    // Retrieve employees with filtering and pagination
     const employees = await Employee.findAndCountAll({
+      where: filter,
       limit: parseInt(limit),
       offset: parseInt(offset),
     });
 
-    // Send the paginated response
+    // Send the filtered and paginated response
     res.status(200).json({
       totalItems: employees.count,
       totalPages: Math.ceil(employees.count / limit),
@@ -30,6 +38,7 @@ router.get('/employees', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Error retrieving employees', error: error.message });
   }
 });
+
 
 // Employee POST route with validation and sanitization
 router.post(
