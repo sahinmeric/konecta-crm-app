@@ -2,8 +2,10 @@ const express = require('express');
 const dotenv = require('dotenv');
 const sequelize = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
-const Employee = require('./models/Employee');
 const employeeRoutes = require('./routes/employeeRoutes');
+const requestRoutes = require('./routes/requestRoutes');
+const Employee = require('./models/Employee');
+const Request = require('./models/Request');
 
 dotenv.config();
 
@@ -17,6 +19,9 @@ app.use('/api/auth', authRoutes);
 
 // Employee routes
 app.use('/api', employeeRoutes);
+
+// Request routes
+app.use('/api', requestRoutes);
 
 // Test the database connection
 sequelize.authenticate()
