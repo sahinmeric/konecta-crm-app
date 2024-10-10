@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { loginUser, setAuthToken } from '../../services/api';
+import { jwtDecode } from 'jwt-decode';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,11 @@ function Login() {
 
       localStorage.setItem('token', token);
 
-      const userRole = response.data.role;
+      const decodedToken = jwtDecode(token);
+      const userRole = decodedToken.role;
+
+      localStorage.setItem('role', userRole);
+
       if (userRole === 'admin') {
         navigate('/admin');
       } else {
