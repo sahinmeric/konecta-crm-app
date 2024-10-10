@@ -1,55 +1,55 @@
-import React, { useEffect, useState } from 'react';
-import { getEmployees } from '../services/api';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import AddEmployeeModal from "./AddEmployeeModal"
 
-function AdminDashboard() {
+const AdminDashboard = () => {
   const [employees, setEmployees] = useState([]);
-  const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchEmployees = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get("http://localhost:5000/api/employees", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setEmployees(response.data.employees);
+    } catch (error) {
+      console.error("Error fetching employees:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await getEmployees();
-        setEmployees(response.data.employees);
-      } catch (error) {
-        console.error('Error fetching employees:', error);
-      }
-    };
-
     fetchEmployees();
   }, []);
 
-  const handleAddEmployee = () => {
-    navigate('/add-employee');
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
   };
-  console.log(employees)
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleEmployeeAdded = () => {
+    fetchEmployees();
+  };
+
   return (
     <div>
       <h2>Admin Dashboard</h2>
-      <button onClick={handleAddEmployee}>Add New Employee</button>
-      <h3>Employee List</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Salary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {employees.map((employee) => (
-            <tr key={employee.id}>
-              <td>{employee.id}</td>
-              <td>{employee.name}</td>
-              <td>{employee.position}</td>
-              <td>{employee.salary}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <button onClick={handleOpenModal}>Add Employee</button>
+      <ul>
+        {employees.map((employee) => (
+          <li key={employee.id}>{employee.name} - {employee.position}</li>
+        ))}
+      </ul>
+      <AddEmployeeModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onEmployeeAdded={handleEmployeeAdded}
+      />
     </div>
   );
-}
+};
 
 export default AdminDashboard;
