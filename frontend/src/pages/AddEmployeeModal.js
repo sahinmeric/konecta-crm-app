@@ -1,25 +1,34 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
+import useAddEmployee from "../hooks/useAddEmployee";
 
-const AddEmployeeModal = ({ isOpen, onClose, onEmployeeAdded }) => {
+const AddEmployeeModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [salary, setSalary] = useState("");
   const [hireDate, setHireDate] = useState("");
+  const { addEmployee, isLoading } = useAddEmployee();
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
+
+    if (!name || !position || !salary || !hireDate) {
+      alert("All fields are required.");
+      return;
+    }
+
+    const newEmployee = {
+      name,
+      position,
+      salary,
+      hireDate
+    };
+
     try {
-      const token = localStorage.getItem("token");
-      const newEmployee = { name, position, salary, hireDate };
-      await axios.post("http://localhost:5000/api/employees", newEmployee, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      onEmployeeAdded();
+      await addEmployee(newEmployee);
       onClose();
-    } catch (error) {
-      console.error("Error adding employee:", error);
+    } catch (err) {
+      console.error("Error adding employee:", err);
       alert("Error adding employee.");
     }
   };
@@ -71,8 +80,8 @@ const AddEmployeeModal = ({ isOpen, onClose, onEmployeeAdded }) => {
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            <Button type="submit" color="primary">
-              Add Employee
+            <Button type="submit" color="primary" disabled={isLoading}>
+              {isLoading ? "Adding..." : "Add Employee"}
             </Button>
           </DialogActions>
         </form>
