@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
 
 const AddEmployeeModal = ({ isOpen, onClose, onEmployeeAdded }) => {
   const [name, setName] = useState("");
@@ -23,46 +24,60 @@ const AddEmployeeModal = ({ isOpen, onClose, onEmployeeAdded }) => {
     }
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        <h2>Add Employee</h2>
+    <Dialog open={isOpen} onClose={onClose}>
+      <DialogTitle>Add New Employee</DialogTitle>
+      <DialogContent>
         <form onSubmit={handleAddEmployee}>
-          <input
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Name"
             type="text"
-            placeholder="Name"
+            fullWidth
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
-          <input
+          <TextField
+            margin="dense"
+            label="Position"
             type="text"
-            placeholder="Position"
+            fullWidth
             value={position}
             onChange={(e) => setPosition(e.target.value)}
             required
           />
-          <input
+          <TextField
+            margin="dense"
+            label="Salary"
             type="number"
-            placeholder="Salary"
+            fullWidth
             value={salary}
             onChange={(e) => setSalary(e.target.value)}
             required
           />
-          <input
+          <TextField
+            margin="dense"
+            label="Hire Date"
             type="date"
-            placeholder="Hire Date"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
             value={hireDate}
             onChange={(e) => setHireDate(e.target.value)}
             required
           />
-          <button type="submit">Add Employee</button>
+          <DialogActions>
+            <Button onClick={onClose} color="secondary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              Add Employee
+            </Button>
+          </DialogActions>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
