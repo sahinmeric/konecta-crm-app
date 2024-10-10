@@ -5,14 +5,13 @@ import EmployeeList from './EmployeeList';
 import AddEmployeeModal from './AddEmployeeModal';
 
 const AdminDashboard = () => {
-  const { employees, isLoading, isError, error, refetchEmployees } = useGetEmployees();
+  const { employees, isLoading, isError, error } = useGetEmployees();
   const { addEmployee } = useAddEmployee();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleEmployeeAdded = async (newEmployee) => {
     try {
       await addEmployee(newEmployee);
-      refetchEmployees();
       setIsModalOpen(false);
     } catch (error) {
       console.error("Error adding employee:", error);
@@ -28,11 +27,17 @@ const AdminDashboard = () => {
     return <div>Error: {error.message}</div>;
   }
 
+  const employeesList = employees || [];
+
   return (
     <div>
       <h1>Admin Dashboard</h1>
       <button onClick={() => setIsModalOpen(true)}>Add Employee</button>
-      <EmployeeList employees={employees} />
+      {employeesList.length > 0 ? (
+        <EmployeeList employees={employeesList} />
+      ) : (
+        <div>No employees found.</div>
+      )}
       <AddEmployeeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
