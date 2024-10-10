@@ -8,7 +8,9 @@ const EmployeeList = ({ employees }) => {
   const handleDeleteEmployee = (employeeId) => {
     deleteEmployee(employeeId);
   };
-
+  if (employees.length === 0) {
+    return <div>No employees found</div>
+  }
   return (
     <div>
       {isLoading && <div>Deleting employee...</div>}
