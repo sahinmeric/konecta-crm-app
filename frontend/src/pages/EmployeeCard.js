@@ -1,7 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, Typography, Button, CardActions } from "@mui/material";
+import EditEmployeeModal from "./EditEmployeeModal";
 
 const EmployeeCard = ({ employee, onDelete }) => {
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
+
+  const handleEditClick = () => {
+    setEditModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setEditModalOpen(false);
+  };
+
+  const handleEmployeeUpdated = () => {
+    setEditModalOpen(false);
+  };
+
   return (
     <Card sx={{ marginBottom: 2 }}>
       <CardContent>
@@ -19,17 +34,19 @@ const EmployeeCard = ({ employee, onDelete }) => {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleEditClick}>
           Edit
         </Button>
-        <Button
-          size="small"
-          color="error"
-          onClick={() => onDelete(employee.id)}
-        >
+        <Button size="small" color="error" onClick={() => onDelete(employee.id)}>
           Delete
         </Button>
       </CardActions>
+      <EditEmployeeModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseModal}
+        employee={employee}
+        onEmployeeUpdated={handleEmployeeUpdated}
+      />
     </Card>
   );
 };
