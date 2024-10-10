@@ -15,7 +15,7 @@ const EditEmployeeModal = ({ isOpen, onClose, employee, onEmployeeUpdated }) => 
       setName(employee.name);
       setPosition(employee.position);
       setSalary(employee.salary);
-      setHireDate(employee.hireDate);
+      setHireDate(employee.hireDate.slice(0, 10));
     }
   }, [employee]);
 
