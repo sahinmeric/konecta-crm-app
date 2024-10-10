@@ -22,7 +22,11 @@ const EmployeeCard = ({ employee, onDelete }) => {
         <Button size="small" color="primary">
           Edit
         </Button>
-        <Button size="small" color="error" onClick={() => onDelete(employee.id)}>
+        <Button
+          size="small"
+          color="error"
+          onClick={() => onDelete(employee.id)}
+        >
           Delete
         </Button>
       </CardActions>
