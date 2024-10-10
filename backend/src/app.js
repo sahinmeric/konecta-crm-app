@@ -6,10 +6,15 @@ const employeeRoutes = require('./routes/employeeRoutes');
 const requestRoutes = require('./routes/requestRoutes');
 const Employee = require('./models/Employee');
 const Request = require('./models/Request');
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3000' // Allow requests from this origin
+}));
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -30,10 +35,6 @@ sequelize.authenticate()
 
 // Synchronize all models with the database
 sequelize.sync()
-  .then(() => console.log('All models were synchronized successfully.'))
-  .catch(err => console.log('Error synchronizing models: ' + err));
-
-sequelize.sync({ alter: true }) // Use alter to update the existing tables without dropping them
   .then(() => console.log('All models were synchronized successfully.'))
   .catch(err => console.log('Error synchronizing models: ' + err));
 
