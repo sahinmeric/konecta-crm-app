@@ -1,50 +1,41 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import AddEmployeeModal from "./AddEmployeeModal";
-import { Button } from "@mui/material";
+import React, { useState } from 'react';
+import useGetEmployees from '../hooks/useGetEmployees';
+import useAddEmployee from '../hooks/useAddEmployee';
+import EmployeeList from './EmployeeList';
+import AddEmployeeModal from './AddEmployeeModal';
 
 const AdminDashboard = () => {
-  const [employees, setEmployees] = useState([]);
-  const [isModalOpen, setModalOpen] = useState(false);
+  const { employees, isLoading, isError, error, refetchEmployees } = useGetEmployees();
+  const { addEmployee } = useAddEmployee();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchEmployees = async () => {
-    const token = localStorage.getItem("token");
+  const handleEmployeeAdded = async (newEmployee) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/employees", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setEmployees(response.data.employees);
+      await addEmployee(newEmployee);
+      refetchEmployees();
+      setIsModalOpen(false);
     } catch (error) {
-      console.error("Error fetching employees:", error);
+      console.error("Error adding employee:", error);
+      alert("Error adding employee.");
     }
   };
 
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
+  if (isLoading) {
+    return <div>Loading employees...</div>;
+  }
 
-  const handleEmployeeAdded = () => {
-    fetchEmployees(); // Refresh the employee list after adding a new employee
-  };
+  if (isError) {
+    return <div>Error: {error.message}</div>;
+  }
 
   return (
     <div>
       <h1>Admin Dashboard</h1>
-      <Button variant="contained" color="primary" onClick={() => setModalOpen(true)}>
-        Add Employee
-      </Button>
-
-      {/* Employee List */}
-      <ul>
-        {employees.map((employee) => (
-          <li key={employee.id}>
-            {employee.name} - {employee.position}
-          </li>
-        ))}
-      </ul>
+      <button onClick={() => setIsModalOpen(true)}>Add Employee</button>
+      <EmployeeList employees={employees} />
       <AddEmployeeModal
         isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
+        onClose={() => setIsModalOpen(false)}
         onEmployeeAdded={handleEmployeeAdded}
       />
     </div>
