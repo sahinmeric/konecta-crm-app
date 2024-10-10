@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import AddEmployeeModal from "./AddEmployeeModal"
+import AddEmployeeModal from "./AddEmployeeModal";
+import { Button } from "@mui/material";
 
 const AdminDashboard = () => {
   const [employees, setEmployees] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const fetchEmployees = async () => {
+    const token = localStorage.getItem("token");
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:5000/api/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -22,30 +23,28 @@ const AdminDashboard = () => {
     fetchEmployees();
   }, []);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   const handleEmployeeAdded = () => {
-    fetchEmployees();
+    fetchEmployees(); // Refresh the employee list after adding a new employee
   };
 
   return (
     <div>
-      <h2>Admin Dashboard</h2>
-      <button onClick={handleOpenModal}>Add Employee</button>
+      <h1>Admin Dashboard</h1>
+      <Button variant="contained" color="primary" onClick={() => setModalOpen(true)}>
+        Add Employee
+      </Button>
+
+      {/* Employee List */}
       <ul>
         {employees.map((employee) => (
-          <li key={employee.id}>{employee.name} - {employee.position}</li>
+          <li key={employee.id}>
+            {employee.name} - {employee.position}
+          </li>
         ))}
       </ul>
       <AddEmployeeModal
         isOpen={isModalOpen}
-        onClose={handleCloseModal}
+        onClose={() => setModalOpen(false)}
         onEmployeeAdded={handleEmployeeAdded}
       />
     </div>
