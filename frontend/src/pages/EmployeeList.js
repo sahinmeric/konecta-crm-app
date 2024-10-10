@@ -1,16 +1,20 @@
 import React from 'react';
 import EmployeeCard from './EmployeeCard';
 import useDeleteEmployee from '../hooks/useDeleteEmployee';
+import Pagination from '@mui/material/Pagination';
+import Box from '@mui/material/Box';
 
-const EmployeeList = ({ employees }) => {
+const EmployeeList = ({ employees, totalEmployees, totalPages, currentPage, onPageChange }) => {
   const { deleteEmployee, isLoading, isError, error } = useDeleteEmployee();
 
   const handleDeleteEmployee = (employeeId) => {
     deleteEmployee(employeeId);
   };
+
   if (employees.length === 0) {
-    return <div>No employees found</div>
+    return <div>No employees found</div>;
   }
+
   return (
     <div>
       {isLoading && <div>Deleting employee...</div>}
@@ -22,6 +26,14 @@ const EmployeeList = ({ employees }) => {
           onDelete={handleDeleteEmployee}
         />
       ))}
+      <Box display="flex" justifyContent="center" marginTop={2}>
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={onPageChange}
+          color="primary"
+        />
+      </Box>
     </div>
   );
 };

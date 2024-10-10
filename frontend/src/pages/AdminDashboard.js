@@ -5,9 +5,14 @@ import EmployeeList from './EmployeeList';
 import AddEmployeeModal from './AddEmployeeModal';
 
 const AdminDashboard = () => {
-  const { employees, isLoading, isError, error } = useGetEmployees();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { employees, totalEmployees, totalPages, isLoading, isError, error } = useGetEmployees(currentPage, 10);
   const { addEmployee } = useAddEmployee();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
 
   const handleEmployeeAdded = async (newEmployee) => {
     try {
@@ -27,17 +32,17 @@ const AdminDashboard = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const employeesList = employees || [];
-
   return (
     <div>
       <h1>Admin Dashboard</h1>
       <button onClick={() => setIsModalOpen(true)}>Add Employee</button>
-      {employeesList.length > 0 ? (
-        <EmployeeList employees={employeesList} />
-      ) : (
-        <div>No employees found.</div>
-      )}
+      <EmployeeList
+        employees={employees}
+        totalEmployees={totalEmployees}
+        totalPages={totalPages}
+        currentPage={currentPage}
+        onPageChange={handlePageChange}
+      />
       <AddEmployeeModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
