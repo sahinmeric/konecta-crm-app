@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Tabs, Tab, Box, Container, Button } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Tabs, Tab, Box, Container, Button, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import useGetEmployees from '../hooks/useGetEmployees';
 import useAddEmployee from '../hooks/useAddEmployee';
@@ -8,8 +8,13 @@ import AddEmployeeModal from './AddEmployeeModal';
 import useGetRequests from '../hooks/useGetRequests';
 import RequestList from './RequestList';
 import AddRequestModal from './AddRequestModal';
+import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
+
 
 const Dashboard = () => {
+  const [role, setRole] = useState('');
+  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState(0);
   const [currentEmployeePage, setCurrentEmployeePage] = useState(1);
   const { employees = [], totalEmployees, totalPages: employeePages, isLoading: isLoadingEmployees, isError: isErrorEmployees, error: errorEmployees } = useGetEmployees(currentEmployeePage, 10);
@@ -18,6 +23,18 @@ const Dashboard = () => {
   const [currentRequestPage, setCurrentRequestPage] = useState(1);
   const { requests = [], totalRequests, totalPages: requestPages, isLoading: isLoadingRequests, isError: isErrorRequests, error: errorRequests } = useGetRequests(currentRequestPage, 10);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    const decodedToken = jwtDecode(token);
+    const userRole = decodedToken.role;
+    setRole(userRole);
+  }, [navigate]);
 
   const handleEmployeePageChange = (event, value) => {
     setCurrentEmployeePage(value);
@@ -56,11 +73,13 @@ const Dashboard = () => {
 
   return (
     <Container>
+      <Typography variant="h4" sx={{ mb: 4 }}>
+        {role === 'admin' ? 'Admin Dashboard' : 'Employee Dashboard'}
+      </Typography>
       <Tabs value={currentTab} onChange={handleTabChange} centered>
         <Tab label="Employees" />
         <Tab label="Requests" />
       </Tabs>
-
       <Box sx={{ p: 3 }}>
         {currentTab === 0 && (
           <div>
