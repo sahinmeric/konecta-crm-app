@@ -2,17 +2,27 @@ import React from 'react';
 import { Card, CardContent, Typography, Button, CardActions } from '@mui/material';
 
 const RequestCard = ({ request, onDelete, onEdit }) => {
+
   return (
     <Card sx={{ marginBottom: 2 }}>
       <CardContent>
         <Typography variant="h6" component="div">
-          {request.title}
+          Summary: {request.summary}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Employee ID: {request.id}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Description: {request.description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Status: {request.status}
+          Code: {request.code}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Created At: {new Date(request.createdAt).toLocaleString()}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          Updated At: {new Date(request.updatedAt).toLocaleString()}
         </Typography>
       </CardContent>
       <CardActions>
