@@ -86,6 +86,7 @@ const AdminDashboard = () => {
               totalPages={requestPages}
               currentPage={currentRequestPage}
               onPageChange={handleRequestPageChange}
+              employees={employees}
             />
             <AddRequestModal
               isOpen={isRequestModalOpen}
