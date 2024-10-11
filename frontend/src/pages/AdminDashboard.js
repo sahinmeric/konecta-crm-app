@@ -1,54 +1,102 @@
 import React, { useState } from 'react';
+import { Tabs, Tab, Box, Container } from '@mui/material';
 import useGetEmployees from '../hooks/useGetEmployees';
 import useAddEmployee from '../hooks/useAddEmployee';
 import EmployeeList from './EmployeeList';
 import AddEmployeeModal from './AddEmployeeModal';
+import useGetRequests from '../hooks/useGetRequests';
+import RequestList from './RequestList';
+import AddRequestModal from './AddRequestModal';
 
 const AdminDashboard = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const { employees, totalEmployees, totalPages, isLoading, isError, error } = useGetEmployees(currentPage, 10);
+  const [currentTab, setCurrentTab] = useState(0);
+  const [currentEmployeePage, setCurrentEmployeePage] = useState(1);
+  const { employees = [], totalEmployees, totalPages: employeePages, isLoading: isLoadingEmployees, isError: isErrorEmployees, error: errorEmployees } = useGetEmployees(currentEmployeePage, 10);
   const { addEmployee } = useAddEmployee();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEmployeeModalOpen, setIsEmployeeModalOpen] = useState(false);
+  const [currentRequestPage, setCurrentRequestPage] = useState(1);
+  const { requests = [], totalRequests, totalPages: requestPages, isLoading: isLoadingRequests, isError: isErrorRequests, error: errorRequests } = useGetRequests(currentRequestPage, 10);
+  const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
+  const handleEmployeePageChange = (event, value) => {
+    setCurrentEmployeePage(value);
+  };
+
+  const handleRequestPageChange = (event, value) => {
+    setCurrentRequestPage(value);
   };
 
   const handleEmployeeAdded = async (newEmployee) => {
     try {
       await addEmployee(newEmployee);
-      setIsModalOpen(false);
+      setIsEmployeeModalOpen(false);
     } catch (error) {
-      console.error("Error adding employee:", error);
-      alert("Error adding employee.");
+      console.error('Error adding employee:', error);
+      alert('Error adding employee.');
     }
   };
 
-  if (isLoading) {
-    return <div>Loading employees...</div>;
+  const handleTabChange = (event, newValue) => {
+    setCurrentTab(newValue);
+  };
+
+  if (isLoadingEmployees || isLoadingRequests) {
+    return <div>Loading data...</div>;
   }
 
-  if (isError) {
-    return <div>Error: {error.message}</div>;
+  if (isErrorEmployees || isErrorRequests) {
+    return (
+      <div>
+        {isErrorEmployees && <div>Error loading employees: {errorEmployees.message}</div>}
+        {isErrorRequests && <div>Error loading requests: {errorRequests.message}</div>}
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
-      <button onClick={() => setIsModalOpen(true)}>Add Employee</button>
-      <EmployeeList
-        employees={employees}
-        totalEmployees={totalEmployees}
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={handlePageChange}
-      />
-      <AddEmployeeModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onEmployeeAdded={handleEmployeeAdded}
-      />
-    </div>
+    <Container>
+      <Tabs value={currentTab} onChange={handleTabChange} centered>
+        <Tab label="Employees" />
+        <Tab label="Requests" />
+      </Tabs>
+      <Box sx={{ p: 3 }}>
+        {currentTab === 0 && (
+          <div>
+            <button onClick={() => setIsEmployeeModalOpen(true)}>Add Employee</button>
+            <EmployeeList
+              employees={employees}
+              totalEmployees={totalEmployees}
+              totalPages={employeePages}
+              currentPage={currentEmployeePage}
+              onPageChange={handleEmployeePageChange}
+            />
+            <AddEmployeeModal
+              isOpen={isEmployeeModalOpen}
+              onClose={() => setIsEmployeeModalOpen(false)}
+              onEmployeeAdded={handleEmployeeAdded}
+            />
+          </div>
+        )}
+        {currentTab === 1 && (
+          <div>
+            <button onClick={() => setIsRequestModalOpen(true)}>Add Request</button>
+            <RequestList
+              requests={requests}
+              totalRequests={totalRequests}
+              totalPages={requestPages}
+              currentPage={currentRequestPage}
+              onPageChange={handleRequestPageChange}
+            />
+            <AddRequestModal
+              isOpen={isRequestModalOpen}
+              onClose={() => setIsRequestModalOpen(false)}
+              onRequestAdded={() => setIsRequestModalOpen(false)}
+              employees={employees}
+            />
+          </div>
+        )}
+      </Box>
+    </Container>
   );
 };
 
