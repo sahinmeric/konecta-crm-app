@@ -29,25 +29,19 @@ function Login() {
     try {
       const response = await loginUser(formData);
       const token = response.data.token;
-      console.log('User logged in successfully:', response.data);
 
       setAuthToken(token);
       localStorage.setItem('token', token);
 
       const decodedToken = jwtDecode(token);
       const userRole = decodedToken.role;
-      localStorage.setItem('role', userRole);
 
       setLoading(false);
       setSnackbarMessage('Login Successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
 
-      if (userRole === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/employee');
-      }
+      navigate(userRole === 'admin' ? '/admin' : '/employee');
     } catch (error) {
       setLoading(false);
       setSnackbarMessage('Login Failed! Please check your credentials.');
