@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Tabs, Tab, Box, Container } from '@mui/material';
+import { Tabs, Tab, Box, Container, Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import useGetEmployees from '../hooks/useGetEmployees';
 import useAddEmployee from '../hooks/useAddEmployee';
 import EmployeeList from './EmployeeList';
@@ -59,10 +60,21 @@ const AdminDashboard = () => {
         <Tab label="Employees" />
         <Tab label="Requests" />
       </Tabs>
+
       <Box sx={{ p: 3 }}>
         {currentTab === 0 && (
           <div>
-            <button onClick={() => setIsEmployeeModalOpen(true)}>Add Employee</button>
+            {/* Styled Button to Add Employee */}
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<AddIcon />} // Add Icon for visual appeal
+              onClick={() => setIsEmployeeModalOpen(true)}
+              sx={{ marginBottom: 2 }} // Add some margin for spacing
+            >
+              Add Employee
+            </Button>
+
             <EmployeeList
               employees={employees}
               totalEmployees={totalEmployees}
@@ -70,6 +82,7 @@ const AdminDashboard = () => {
               currentPage={currentEmployeePage}
               onPageChange={handleEmployeePageChange}
             />
+
             <AddEmployeeModal
               isOpen={isEmployeeModalOpen}
               onClose={() => setIsEmployeeModalOpen(false)}
@@ -77,9 +90,20 @@ const AdminDashboard = () => {
             />
           </div>
         )}
+
         {currentTab === 1 && (
           <div>
-            <button onClick={() => setIsRequestModalOpen(true)}>Add Request</button>
+            {/* Styled Button to Add Request */}
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<AddIcon />} // Add Icon for visual appeal
+              onClick={() => setIsRequestModalOpen(true)}
+              sx={{ marginBottom: 2 }} // Add some margin for spacing
+            >
+              Add Request
+            </Button>
+
             <RequestList
               requests={requests}
               totalRequests={totalRequests}
@@ -88,6 +112,7 @@ const AdminDashboard = () => {
               onPageChange={handleRequestPageChange}
               employees={employees}
             />
+
             <AddRequestModal
               isOpen={isRequestModalOpen}
               onClose={() => setIsRequestModalOpen(false)}
