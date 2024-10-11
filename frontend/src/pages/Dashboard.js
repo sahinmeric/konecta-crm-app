@@ -9,7 +9,7 @@ import useGetRequests from '../hooks/useGetRequests';
 import RequestList from './RequestList';
 import AddRequestModal from './AddRequestModal';
 
-const AdminDashboard = () => {
+const Dashboard = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [currentEmployeePage, setCurrentEmployeePage] = useState(1);
   const { employees = [], totalEmployees, totalPages: employeePages, isLoading: isLoadingEmployees, isError: isErrorEmployees, error: errorEmployees } = useGetEmployees(currentEmployeePage, 10);
@@ -64,17 +64,15 @@ const AdminDashboard = () => {
       <Box sx={{ p: 3 }}>
         {currentTab === 0 && (
           <div>
-            {/* Styled Button to Add Employee */}
             <Button
               variant="contained"
               color="primary"
-              startIcon={<AddIcon />} // Add Icon for visual appeal
+              startIcon={<AddIcon />}
               onClick={() => setIsEmployeeModalOpen(true)}
-              sx={{ marginBottom: 2 }} // Add some margin for spacing
+              sx={{ marginBottom: 2 }}
             >
               Add Employee
             </Button>
-
             <EmployeeList
               employees={employees}
               totalEmployees={totalEmployees}
@@ -82,7 +80,6 @@ const AdminDashboard = () => {
               currentPage={currentEmployeePage}
               onPageChange={handleEmployeePageChange}
             />
-
             <AddEmployeeModal
               isOpen={isEmployeeModalOpen}
               onClose={() => setIsEmployeeModalOpen(false)}
@@ -90,20 +87,17 @@ const AdminDashboard = () => {
             />
           </div>
         )}
-
         {currentTab === 1 && (
           <div>
-            {/* Styled Button to Add Request */}
             <Button
               variant="contained"
               color="secondary"
-              startIcon={<AddIcon />} // Add Icon for visual appeal
+              startIcon={<AddIcon />}
               onClick={() => setIsRequestModalOpen(true)}
-              sx={{ marginBottom: 2 }} // Add some margin for spacing
+              sx={{ marginBottom: 2 }}
             >
               Add Request
             </Button>
-
             <RequestList
               requests={requests}
               totalRequests={totalRequests}
@@ -112,7 +106,6 @@ const AdminDashboard = () => {
               onPageChange={handleRequestPageChange}
               employees={employees}
             />
-
             <AddRequestModal
               isOpen={isRequestModalOpen}
               onClose={() => setIsRequestModalOpen(false)}
@@ -126,4 +119,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard;
+export default Dashboard;
