@@ -9,8 +9,6 @@ Konecta CRM is a customer relationship management application that allows users 
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
