@@ -40,7 +40,7 @@ const DashboardHeader = () => {
       </Typography>
       <Button
         variant="contained"
-        color="secondary"
+        color="error"
         onClick={handleLogout}
         sx={{ color: 'white' }}
       >
