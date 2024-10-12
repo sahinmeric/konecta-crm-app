@@ -40,8 +40,9 @@ function Login() {
       setSnackbarMessage('Login Successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
-
-      navigate(userRole === 'admin' ? '/admin' : '/employee');
+      setTimeout(() => {
+        navigate(userRole === 'admin' ? '/admin' : '/employee');
+      }, 2000);
     } catch (error) {
       setLoading(false);
       setSnackbarMessage('Login Failed! Please check your credentials.');
