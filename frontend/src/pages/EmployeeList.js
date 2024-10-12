@@ -4,7 +4,7 @@ import useDeleteEmployee from '../hooks/useDeleteEmployee';
 import Pagination from '@mui/material/Pagination';
 import Box from '@mui/material/Box';
 
-const EmployeeList = ({ employees, totalEmployees, totalPages, currentPage, onPageChange }) => {
+const EmployeeList = ({ employees, totalEmployees, totalPages, currentPage, onPageChange, isAdmin }) => {
   const { deleteEmployee, isLoading, isError, error } = useDeleteEmployee();
 
   const handleDeleteEmployee = (employeeId) => {
@@ -24,6 +24,7 @@ const EmployeeList = ({ employees, totalEmployees, totalPages, currentPage, onPa
           key={employee.id}
           employee={employee}
           onDelete={handleDeleteEmployee}
+          isAdmin={isAdmin}
         />
       ))}
       <Box display="flex" justifyContent="center" marginTop={2}>

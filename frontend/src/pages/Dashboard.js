@@ -23,6 +23,7 @@ const Dashboard = () => {
   const [currentRequestPage, setCurrentRequestPage] = useState(1);
   const { requests = [], totalRequests, totalPages: requestPages, isLoading: isLoadingRequests, isError: isErrorRequests, error: errorRequests } = useGetRequests(currentRequestPage, 10);
   const [isRequestModalOpen, setIsRequestModalOpen] = useState(false);
+  const isAdmin = role === 'admin';
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -74,7 +75,7 @@ const Dashboard = () => {
   return (
     <Container>
       <Typography variant="h4" sx={{ mb: 4 }}>
-        {role === 'admin' ? 'Admin Dashboard' : 'Employee Dashboard'}
+        {isAdmin ? 'Admin Dashboard' : 'Employee Dashboard'}
       </Typography>
       <Tabs value={currentTab} onChange={handleTabChange} centered>
         <Tab label="Employees" />
@@ -83,7 +84,7 @@ const Dashboard = () => {
       <Box sx={{ p: 3 }}>
         {currentTab === 0 && (
           <div>
-            <Button
+            {isAdmin && <Button
               variant="contained"
               color="primary"
               startIcon={<AddIcon />}
@@ -91,16 +92,17 @@ const Dashboard = () => {
               sx={{ marginBottom: 2 }}
             >
               Add Employee
-            </Button>
+            </Button>}
             <EmployeeList
               employees={employees}
               totalEmployees={totalEmployees}
               totalPages={employeePages}
               currentPage={currentEmployeePage}
               onPageChange={handleEmployeePageChange}
+              isAdmin={isAdmin}
             />
             <AddEmployeeModal
-              isOpen={isEmployeeModalOpen}
+              isOpen={isEmployeeModalOpen && isAdmin}
               onClose={() => setIsEmployeeModalOpen(false)}
               onEmployeeAdded={handleEmployeeAdded}
             />
@@ -124,6 +126,7 @@ const Dashboard = () => {
               currentPage={currentRequestPage}
               onPageChange={handleRequestPageChange}
               employees={employees}
+              isAdmin={isAdmin}
             />
             <AddRequestModal
               isOpen={isRequestModalOpen}

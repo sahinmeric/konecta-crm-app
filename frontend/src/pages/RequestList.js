@@ -5,7 +5,7 @@ import useDeleteRequest from '../hooks/useDeleteRequest';
 import useUpdateRequest from '../hooks/useUpdateRequest';
 import EditRequestModal from './EditRequestModal';
 
-const RequestList = ({ requests, employees }) => {
+const RequestList = ({ requests, employees, isAdmin }) => {
   const { deleteRequest, isLoading: isDeleting, isError: isDeleteError, error: deleteError } = useDeleteRequest();
   const { updateRequest, isLoading: isEditing, isError: isEditError, error: editError } = useUpdateRequest();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
@@ -44,6 +44,7 @@ const RequestList = ({ requests, employees }) => {
           request={request}
           onDelete={handleDeleteRequest}
           onEdit={handleEditRequest}
+          isAdmin={isAdmin}
         />
       ))}
       <EditRequestModal

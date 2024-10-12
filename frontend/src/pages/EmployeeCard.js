@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, CardContent, Typography, Button, CardActions } from "@mui/material";
 import EditEmployeeModal from "./EditEmployeeModal";
 
-const EmployeeCard = ({ employee, onDelete }) => {
+const EmployeeCard = ({ employee, onDelete, isAdmin }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
 
   const handleEditClick = () => {
@@ -33,14 +33,14 @@ const EmployeeCard = ({ employee, onDelete }) => {
           Hired on: {new Date(employee.hireDate).toLocaleDateString()}
         </Typography>
       </CardContent>
-      <CardActions>
+      {isAdmin && <CardActions>
         <Button size="small" color="primary" onClick={handleEditClick}>
           Edit
         </Button>
         <Button size="small" color="error" onClick={() => onDelete(employee.id)}>
           Delete
         </Button>
-      </CardActions>
+      </CardActions>}
       <EditEmployeeModal
         isOpen={isEditModalOpen}
         onClose={handleCloseModal}
