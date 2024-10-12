@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-import useAddRequest from '../hooks/useAddRequest'; // Ensure this hook is correctly defined to handle adding requests
+import useAddRequest from '../../hooks/useAddRequest';
+
 
 const AddRequestModal = ({ isOpen, onClose, employees = [] }) => {
-  const [employeeId, setEmployeeId] = useState(''); // Employee ID (foreign key)
-  const [summary, setSummary] = useState(''); // Summary of the request
-  const [description, setDescription] = useState(''); // Detailed description of the request
+  const [employeeId, setEmployeeId] = useState('');
+  const [summary, setSummary] = useState('');
+  const [description, setDescription] = useState('');
   const [code, setCode] = useState('');
-  const { addRequest, isLoading } = useAddRequest(); // Hook to add the request
+  const { addRequest, isLoading } = useAddRequest();
 
   const handleAddRequest = async (e) => {
     e.preventDefault();

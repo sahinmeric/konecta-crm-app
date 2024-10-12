@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import RequestCard from './RequestCard';
-import useDeleteRequest from '../hooks/useDeleteRequest';
-import useUpdateRequest from '../hooks/useUpdateRequest';
-import EditRequestModal from './EditRequestModal';
+import RequestCard from '../Cards/RequestCard';
+import useDeleteRequest from '../../hooks/useDeleteRequest';
+import useUpdateRequest from '../../hooks/useUpdateRequest';
+import EditRequestModal from '../Modals/EditRequestModal';
 
 const RequestList = ({ requests, employees, isAdmin }) => {
   const { deleteRequest, isLoading: isDeleting, isError: isDeleteError, error: deleteError } = useDeleteRequest();

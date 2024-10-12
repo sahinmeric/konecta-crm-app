@@ -1,42 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button } from "@mui/material";
-import useEditEmployee from "../hooks/useEditEmployee";
+import useAddEmployee from "../../hooks/useAddEmployee";
 
-const EditEmployeeModal = ({ isOpen, onClose, employee, onEmployeeUpdated }) => {
-  const { editEmployee } = useEditEmployee();
-
+const AddEmployeeModal = ({ isOpen, onClose }) => {
   const [name, setName] = useState("");
   const [position, setPosition] = useState("");
   const [salary, setSalary] = useState("");
   const [hireDate, setHireDate] = useState("");
+  const { addEmployee, isLoading } = useAddEmployee();
 
-  useEffect(() => {
-    if (employee) {
-      setName(employee.name);
-      setPosition(employee.position);
-      setSalary(employee.salary);
-      setHireDate(employee.hireDate.slice(0, 10));
-    }
-  }, [employee]);
-
-  const handleEditEmployee = async (e) => {
+  const handleAddEmployee = async (e) => {
     e.preventDefault();
+
+    if (!name || !position || !salary || !hireDate) {
+      alert("All fields are required.");
+      return;
+    }
+
+    const newEmployee = {
+      name,
+      position,
+      salary,
+      hireDate
+    };
+
     try {
-      const updatedEmployee = { id: employee.id, name, position, salary, hireDate };
-      await editEmployee(updatedEmployee);
-      onEmployeeUpdated();
+      await addEmployee(newEmployee);
       onClose();
-    } catch (error) {
-      console.error("Error updating employee:", error);
-      alert("Error updating employee.");
+    } catch (err) {
+      console.error("Error adding employee:", err);
+      alert("Error adding employee.");
     }
   };
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      <DialogTitle>Edit Employee</DialogTitle>
+      <DialogTitle>Add New Employee</DialogTitle>
       <DialogContent>
-        <form onSubmit={handleEditEmployee}>
+        <form onSubmit={handleAddEmployee}>
           <TextField
             autoFocus
             margin="dense"
@@ -79,8 +80,8 @@ const EditEmployeeModal = ({ isOpen, onClose, employee, onEmployeeUpdated }) => 
             <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
-            <Button type="submit" color="primary">
-              Save Changes
+            <Button type="submit" color="primary" disabled={isLoading}>
+              {isLoading ? "Adding..." : "Add Employee"}
             </Button>
           </DialogActions>
         </form>
@@ -89,4 +90,4 @@ const EditEmployeeModal = ({ isOpen, onClose, employee, onEmployeeUpdated }) => 
   );
 };
 
-export default EditEmployeeModal;
+export default AddEmployeeModal;

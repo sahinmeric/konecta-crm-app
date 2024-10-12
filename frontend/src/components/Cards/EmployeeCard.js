@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Card, CardContent, Typography, Button, CardActions } from "@mui/material";
-import EditEmployeeModal from "./EditEmployeeModal";
+import EditEmployeeModal from "../Modals/EditEmployeeModal";
 
 const EmployeeCard = ({ employee, onDelete, isAdmin }) => {
   const [isEditModalOpen, setEditModalOpen] = useState(false);

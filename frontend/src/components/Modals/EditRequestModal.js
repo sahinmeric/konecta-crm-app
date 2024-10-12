@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Button, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-import useUpdateRequest from '../hooks/useUpdateRequest';
+import useUpdateRequest from '../../hooks/useUpdateRequest';
 
 const EditRequestModal = ({ isOpen, onClose, request, employees = [] }) => {
   const [employeeId, setEmployeeId] = useState('');

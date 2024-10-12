@@ -1,6 +1,6 @@
 import React from 'react';
-import EmployeeCard from './EmployeeCard';
-import useDeleteEmployee from '../hooks/useDeleteEmployee';
+import EmployeeCard from '../Cards/EmployeeCard';
+import useDeleteEmployee from '../../hooks/useDeleteEmployee';
 import Pagination from '@mui/material/Pagination';
 import Box from '@mui/material/Box';
 
@@ -12,7 +12,7 @@ const EmployeeList = ({ employees, totalEmployees, totalPages, currentPage, onPa
   };
 
   if (employees.length === 0) {
-    return <div>No employees found</div>;
+    return <div>No employees found, only admins can add employee</div>;
   }
 
   return (
