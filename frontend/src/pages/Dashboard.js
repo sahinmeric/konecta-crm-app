@@ -74,9 +74,19 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Typography variant="h4" sx={{ mb: 4 }}>
-        {isAdmin ? 'Admin Dashboard' : 'Employee Dashboard'}
-      </Typography>
+      <Box
+        sx={{
+          backgroundColor: '#1976d2',
+          height: '100px',
+          display: 'flex',
+          alignItems: 'center',
+          paddingLeft: '20px',
+        }}
+      >
+        <Typography variant="h4" color="white">
+          {isAdmin ? 'Admin Dashboard' : 'Employee Dashboard'}
+        </Typography>
+      </Box>
       <Tabs value={currentTab} onChange={handleTabChange} centered>
         <Tab label="Employees" />
         <Tab label="Requests" />
