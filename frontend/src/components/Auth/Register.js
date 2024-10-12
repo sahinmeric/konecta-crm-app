@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { registerUser } from '../../services/api';
-import { Container, TextField, Button, Typography, Box, MenuItem, Select, InputLabel, FormControl, Grid2 } from '@mui/material';
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  Grid2,
+  CircularProgress,
+  Snackbar
+} from '@mui/material';
 
 function Register() {
+  const [loading, setLoading] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState('success');
   const [formData, setFormData] = useState({
     username: '',
     password: '',
@@ -21,14 +38,24 @@ function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await registerUser(formData);
       console.log('User registered successfully:', response.data);
-      alert('Registration Successful!');
-      navigate('/login');
+      setLoading(false);
+      setSnackbarMessage('User registered successfully!');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
     } catch (error) {
       console.error('Error registering user:', error);
-      alert('Registration Failed!');
+      setSnackbarMessage('Registration Failed! Please try again later.');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      setLoading(false);
     }
   };
 
@@ -101,8 +128,8 @@ function Register() {
             </FormControl>
           </Grid2>
           <Grid2 item sx={{ marginTop: 2 }}>
-            <Button variant="contained" color="primary" fullWidth type="submit">
-              Register
+            <Button variant="contained" color="primary" fullWidth type="submit" disabled={loading}>
+              {loading ? <CircularProgress size={24} color="inherit" /> : 'Register'}
             </Button>
           </Grid2>
         </Grid2>
@@ -118,6 +145,14 @@ function Register() {
       >
         Back
       </Button>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarOpen(false)}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      />
     </Container>
   );
 }
