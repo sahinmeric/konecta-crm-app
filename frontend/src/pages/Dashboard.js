@@ -55,6 +55,12 @@ const Dashboard = () => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    navigate('/login');
+  };
+
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
@@ -80,12 +86,22 @@ const Dashboard = () => {
           height: '100px',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'space-between',
           paddingLeft: '20px',
+          paddingRight: '20px',
         }}
       >
         <Typography variant="h4" color="white">
           {isAdmin ? 'Admin Dashboard' : 'Employee Dashboard'}
         </Typography>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleLogout}
+          sx={{ color: 'white' }}
+        >
+          Logout
+        </Button>
       </Box>
       <Tabs value={currentTab} onChange={handleTabChange} centered>
         <Tab label="Employees" />
