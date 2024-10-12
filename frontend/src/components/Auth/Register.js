@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../../services/api';
 import {
   Container,
@@ -42,7 +42,6 @@ function Register() {
     try {
       const response = await registerUser(formData);
       console.log('User registered successfully:', response.data);
-      setLoading(false);
       setSnackbarMessage('User registered successfully!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -134,17 +133,23 @@ function Register() {
           </Grid2>
         </Grid2>
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleBack}
-        sx={{
-          alignSelf: 'flex-end',
-          marginTop: 2,
-        }}
-      >
-        Back
-      </Button>
+      <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+        <Button
+          variant="text"
+          color="secondary"
+          component={Link}
+          to="/login"
+        >
+          Login
+        </Button>
+        <Button
+          variant="text"
+          color="primary"
+          onClick={handleBack}
+        >
+          Back
+        </Button>
+      </Box>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}
