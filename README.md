@@ -9,7 +9,6 @@ Konecta CRM is a customer relationship management application that allows users 
 - [Installation](#installation)
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
-- [Database Schema](#database-schema)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -68,13 +67,16 @@ docker-compose up --build
 
 ## API endpoints
 
-**POST** `/api/auth/register`
+Here are the employee-related endpoints along with their HTTP methods:
 
-- **Request Body**:
-  ````json
-  {
-    "username": "yourUsername",
-    "password": "yourPassword",
-    "role": "userRole" // e.g., "admin", "employee"
-  }```
-  ````
+- **GET** `/api/employees` - Retrieve a list of employees.
+- **GET** `/api/employees/:id` - Retrieve a specific employee by ID.
+- **POST** `/api/employees` - Create a new employee.
+- **PUT** `/api/employees/:id` - Update an existing employee by ID.
+- **DELETE** `/api/employees/:id` - Delete an employee by ID.
+- **GET** `/api/requests` - Retrieve a list of requests.
+- **GET** `/api/requests/:id` - Retrieve a specific request by ID.
+- **POST** `/api/requests` - Create a new request.
+- **PUT** `/api/requests/:id` - Update an existing request by ID.
+- **DELETE** `/api/requests/:id` - Delete a request by ID.
+
