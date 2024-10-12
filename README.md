@@ -49,6 +49,18 @@ cd backend
 docker-compose up --build
 ```
 
+4. **Navigate to the frontend directory:**
+
+```bash
+cd frontend
+```
+
+5. **Start the application using Docker Compose:**
+
+```bash
+docker-compose up --build
+```
+
 ## Usage
 
 - **Backend API**: Open your browser and go to `http://localhost:5000`.
