@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Tab, Box, Container, Button, Typography } from '@mui/material';
+import { Tabs, Tab, Box, Container, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import useGetEmployees from '../hooks/useGetEmployees';
 import useAddEmployee from '../hooks/useAddEmployee';
@@ -10,6 +10,7 @@ import RequestList from './RequestList';
 import AddRequestModal from './AddRequestModal';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
+import DashboardHeader from '../components/Header/DashboardHeader';
 
 
 const Dashboard = () => {
@@ -55,12 +56,6 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    navigate('/login');
-  };
-
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
   };
@@ -80,29 +75,7 @@ const Dashboard = () => {
 
   return (
     <Container>
-      <Box
-        sx={{
-          backgroundColor: '#1976d2',
-          height: '100px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          paddingLeft: '20px',
-          paddingRight: '20px',
-        }}
-      >
-        <Typography variant="h4" color="white">
-          {isAdmin ? 'Admin Dashboard' : 'Employee Dashboard'}
-        </Typography>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={handleLogout}
-          sx={{ color: 'white' }}
-        >
-          Logout
-        </Button>
-      </Box>
+      <DashboardHeader />
       <Tabs value={currentTab} onChange={handleTabChange} centered>
         <Tab label="Employees" />
         <Tab label="Requests" />
