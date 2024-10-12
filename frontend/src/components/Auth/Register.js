@@ -32,6 +32,10 @@ function Register() {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Container
       maxWidth="xs"
@@ -103,6 +107,17 @@ function Register() {
           </Grid2>
         </Grid2>
       </Box>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleBack}
+        sx={{
+          alignSelf: 'flex-end',
+          marginTop: 2,
+        }}
+      >
+        Back
+      </Button>
     </Container>
   );
 }

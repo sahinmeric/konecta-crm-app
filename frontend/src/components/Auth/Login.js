@@ -51,6 +51,10 @@ function Login() {
     }
   };
 
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Container
       maxWidth="xs"
@@ -115,8 +119,17 @@ function Login() {
           </Grid2>
         </Grid2>
       </Box>
-
-      {/* Snackbar for success or error messages */}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleBack}
+        sx={{
+          alignSelf: 'flex-end',
+          marginTop: 2,
+        }}
+      >
+        Back
+      </Button>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}
