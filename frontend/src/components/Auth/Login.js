@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, setAuthToken } from '../../services/api';
 import { jwtDecode } from 'jwt-decode';
 import { Container, TextField, Button, Typography, Snackbar, CircularProgress, Box, Grid2 } from '@mui/material';
@@ -36,7 +36,6 @@ function Login() {
       const decodedToken = jwtDecode(token);
       const userRole = decodedToken.role;
 
-      setLoading(false);
       setSnackbarMessage('Login Successful!');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -120,17 +119,23 @@ function Login() {
           </Grid2>
         </Grid2>
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleBack}
-        sx={{
-          alignSelf: 'flex-end',
-          marginTop: 2,
-        }}
-      >
-        Back
-      </Button>
+      <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+        <Button
+          variant="text"
+          color="secondary"
+          component={Link}
+          to="/register"
+        >
+          Register
+        </Button>
+        <Button
+          variant="text"
+          color="primary"
+          onClick={handleBack}
+        >
+          Back
+        </Button>
+      </Box>
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={4000}
